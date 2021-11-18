@@ -1,5 +1,11 @@
-from flask import Flask, request
+from datetime import datetime
+from flask import Flask, request, sessions
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.sql.functions import mode
 from twilio.twiml.messaging_response import MessagingResponse
+import datetime
+import models
+from database import SessionLocal, engine
 import os
 
 app = Flask(__name__)
@@ -7,7 +13,7 @@ app = Flask(__name__)
 @app.route("/")
 
 def hello():
-    return "Hello, World!"
+    return "Hello World!"
 
 """
 1. .intro - about the bot && user.
@@ -26,7 +32,7 @@ Can add on more to see sth like stats. will come back later to this.
 """
 Ideas:
 
-We use dictionaries to add pending tasks corrseponding to dates, to decrease complexities.
+We can use dictionaries to add pending tasks corrseponding to dates, to decrease complexities.
 """
 
 intro = """
@@ -38,18 +44,30 @@ To know more about the available features enter '.help'.
 help = """
 1. .intro - about the bot && user.
 2. .pday / .pending - Work left for today.
-3. .add [task] [DD/MM/YYYY] - adds task in the above format.
-4. .done [task] - Should be sth left today && should be in the list else given an error message.
+3. .add [task] optional[DD/MM/YYYY] - adds task in the above format.
+4. .done [task] optional[DD/MM/YYYY]- Should be sth left && should be in the list else given an error message.
 5. .pmonth - Work left for the month.
 6. .aday / .done - Work done today.
 7. .amonth - Work done this month.
 8. .help - informs about the available options
-9. .done [task] [DD/MM/YY] - done on that day.
 """
 
 default_msg = "Woops idk what that means!! Sorreyy!!!\nTry '.help' to understand me better *insert puppy face*."
 
 def add_task(task):
+
+    db = SessionLocal()
+
+    models.Base.metadata.create_all(bind=engine)
+
+    db_task = models.Task(
+        date=datetime.datetime.now,
+        task=task,
+    )
+    db.add(db_task)
+    db.commit()
+    db.close()
+
     text_file = open(
         os.path.abspath(os.path.dirname(os.path.abspath(__file__))) + '/task.txt', "a", encoding="utf-8")
 
@@ -60,7 +78,16 @@ def add_task(task):
     # close file
     text_file.close()
 
+    return "Task Added Successfully!!"
+
 def get_task():
+
+    db = SessionLocal()
+
+    tasks = db.query(models.Task).all()
+    
+    return tasks
+    
     text_file = open(
         os.path.abspath(os.path.dirname(os.path.abspath(__file__))) + '/task.txt', "r", encoding="utf-8")
 
@@ -71,6 +98,9 @@ def get_task():
     # close file
     text_file.close()
 
+    if tasks == "":
+        return "Woahhh!! Nothing pending Today.\n*YOU ARE ON TRACKK*"
+
     return tasks
 
 
@@ -80,11 +110,9 @@ def get_response(msg):
     elif msg == ".help":
         return help
     elif msg[0:4] == ".add":
-        add_task(msg[5:])
-        return "Added successfully"
+        return add_task(msg[5:])
     elif msg[0:5] == ".pday":
-        tasks = get_task()
-        return tasks
+        return get_task()
 
     return default_msg
 
