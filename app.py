@@ -27,11 +27,11 @@ Ideas:
 We use dictionaries to add pending tasks corrseponding to dates, to decrease complexities.
 """
 
-intro = (
-    "Welcome To Keep Me On Track Bot. "
-    "The bot is built using twilio and flask, it's deployed on heroku. "
-    "To know more about the available features enter '.help'."
-)
+intro = """
+Welcome To Keep Me On Track Bot.
+The bot is built using twilio and flask, it's deployed on heroku.
+To know more about the available features enter '.help'.
+"""
 
 help = """
 1. .intro - about the bot && user.
@@ -45,7 +45,7 @@ help = """
 9. .done [task] [DD/MM/YY] - done on that day.
 """
 
-default_msg = "Woops idk what that means!! Sorreyy!!!\n Try .help instead"
+default_msg = "Woops idk what that means!! Sorreyy!!!\nTry '.help' to understand me better *insert puppy face*."
 
 def get_response(msg):
     if msg == ".intro":
