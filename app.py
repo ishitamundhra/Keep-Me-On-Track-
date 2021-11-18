@@ -4,6 +4,7 @@ from twilio.twiml.messaging_response import MessagingResponse
 app = Flask(__name__)
 
 @app.route("/")
+
 def hello():
     return "Hello, World!"
 
@@ -47,15 +48,27 @@ help = """
 
 default_msg = "Woops idk what that means!! Sorreyy!!!\nTry '.help' to understand me better *insert puppy face*."
 
+pending_task = []
+ 
 def get_response(msg):
     if msg == ".intro":
         return intro
     elif msg == ".help":
         return help
-    
+    elif msg[0:4] == ".add":
+        pending_task.append(msg[5:])
+        return "Added successfully"
+    elif msg[0:5] == ".pday":
+        tasks = ""
+        for p in pending_task:
+            tasks+=p+"\n"
+        return tasks
+
     return default_msg
 
-
+# print (get_response(".add Task1"))
+# print (get_response(".add Task2"))
+# print (get_response(".pday"))
 
 
 @app.route("/sms", methods=['POST'])
