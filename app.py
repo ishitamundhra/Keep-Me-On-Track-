@@ -7,14 +7,53 @@ app = Flask(__name__)
 def hello():
     return "Hello, World!"
 
+"""
+1. .intro - about the bot && user.
+2. .pday / .pending - Work left for today.
+3. .add {task} {DD/MM/YYYY} - adds task in the above format.
+4. .done {task} - Should be sth left today && should be in the list else given an error message.
+5. .pmonth - Work left for the month.
+6. .aday / .done - Work done today.
+7. .amonth - Work done this month.
+8. .help - informs about the available options
+9. .done {task} {DD/MM/YY} - done on that day.
+
+Can add on more to see sth like stats. will come back later to this.
+"""
+
+"""
+Ideas:
+
+We use dictionaries to add pending tasks corrseponding to dates, to decrease complexities.
+"""
+
+intro = (
+    "Welcome To Keep Me On Track Bot. "
+    "The bot is built using twilio and flask, it's deployed on heroku. "
+    "To know more about the available features enter '.help'."
+)
+
+help = """
+1. .intro - about the bot && user.
+2. .pday / .pending - Work left for today.
+3. .add [task] [DD/MM/YYYY] - adds task in the above format.
+4. .done [task] - Should be sth left today && should be in the list else given an error message.
+5. .pmonth - Work left for the month.
+6. .aday / .done - Work done today.
+7. .amonth - Work done this month.
+8. .help - informs about the available options
+9. .done [task] [DD/MM/YY] - done on that day.
+"""
+
+default_msg = "Woops idk what that means!! Sorreyy!!!\n Try .help instead"
 
 def get_response(msg):
     if msg == ".intro":
-        return "welcome To Keep Me On Track Bot. The bot is built using twilio and flask, ans is deployed on heroku"
+        return intro
     elif msg == ".help":
-        return "Still working on this"
+        return help
     
-    return "Woops idk what that means!!Sorreyy"
+    return default_msg
 
 
 
