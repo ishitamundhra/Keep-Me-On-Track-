@@ -11,7 +11,6 @@ import os
 app = Flask(__name__)
 
 @app.route("/")
-
 def hello():
     return "Hello World!"
 
@@ -61,7 +60,7 @@ def add_task(task):
     models.Base.metadata.create_all(bind=engine)
 
     db_task = models.Task(
-        date=datetime.datetime.now,
+        date=datetime.datetime.now(),
         task=task,
     )
     db.add(db_task)
@@ -87,7 +86,7 @@ def get_task():
     tasks = db.query(models.Task).all()
     
     return tasks
-    
+
     text_file = open(
         os.path.abspath(os.path.dirname(os.path.abspath(__file__))) + '/task.txt', "r", encoding="utf-8")
 
