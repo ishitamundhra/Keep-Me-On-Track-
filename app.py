@@ -7,6 +7,18 @@ app = Flask(__name__)
 def hello():
     return "Hello, World!"
 
+
+def get_response(msg):
+    if msg == ".intro":
+        return "welcome To Keep Me On Track Bot. The bot is built using twilio and flask, ans is deployed on heroku"
+    elif msg == ".help":
+        return "Still working on this"
+    
+    return "Woops idk what that means!!Sorreyy"
+
+
+
+
 @app.route("/sms", methods=['POST'])
 def sms_reply():
     """Respond to incoming calls with a simple text message."""
@@ -15,7 +27,10 @@ def sms_reply():
 
     # Create reply
     resp = MessagingResponse()
-    resp.message("You said: {}".format(msg))
+
+    response_msg = get_response(msg)
+
+    resp.message(response_msg)
 
     return str(resp)
 
