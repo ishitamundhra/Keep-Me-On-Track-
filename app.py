@@ -1,5 +1,6 @@
 from flask import Flask, request
 from twilio.twiml.messaging_response import MessagingResponse
+import os
 
 app = Flask(__name__)
 
@@ -48,20 +49,41 @@ help = """
 
 default_msg = "Woops idk what that means!! Sorreyy!!!\nTry '.help' to understand me better *insert puppy face*."
 
-pending_task = []
- 
+def add_task(task):
+    text_file = open(
+        os.path.abspath(os.path.dirname(os.path.abspath(__file__))) + '/task.txt', "a", encoding="utf-8")
+
+    # write data to dest text file.
+    text_file.write(task+"\n")
+
+    text_file.flush()
+    # close file
+    text_file.close()
+
+def get_task():
+    text_file = open(
+        os.path.abspath(os.path.dirname(os.path.abspath(__file__))) + '/task.txt', "r", encoding="utf-8")
+
+    # write data to dest text file.
+    tasks = text_file.read()
+
+    text_file.flush()
+    # close file
+    text_file.close()
+
+    return tasks
+
+
 def get_response(msg):
     if msg == ".intro":
         return intro
     elif msg == ".help":
         return help
     elif msg[0:4] == ".add":
-        pending_task.append(msg[5:])
+        add_task(msg[5:])
         return "Added successfully"
     elif msg[0:5] == ".pday":
-        tasks = ""
-        for p in pending_task:
-            tasks+=p+"\n"
+        tasks = get_task()
         return tasks
 
     return default_msg
@@ -69,7 +91,7 @@ def get_response(msg):
 # print (get_response(".add Task1"))
 # print (get_response(".add Task2"))
 # print (get_response(".pday"))
-
+# print (get_response(".pday"))
 
 @app.route("/sms", methods=['POST'])
 def sms_reply():
