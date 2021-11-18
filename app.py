@@ -63,6 +63,8 @@ def add_task(task):
         date=datetime.datetime.now(),
         task=task,
     )
+
+    print (db_task)
     db.add(db_task)
     db.commit()
     db.close()
@@ -83,8 +85,16 @@ def get_task():
 
     db = SessionLocal()
 
-    tasks = db.query(models.Task).all()
+    taskList = db.query(models.Task).all()
+    print(taskList)
     
+    if taskList == []:
+        return "Woahhh!! Nothing pending Today.\n*YOU ARE ON TRACKK*"
+
+    tasks = ""
+    for task in taskList:
+        tasks+= task.task+"\n"
+
     return tasks
 
     text_file = open(
