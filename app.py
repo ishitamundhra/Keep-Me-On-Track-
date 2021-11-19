@@ -13,8 +13,8 @@ Functions:
 
 1. .intro - about the bot && user. [DONE]
 2. .pday / .pending - Work left for today. [DONE]
-3. .add {task} Optional[DD/MM/YYYY] - adds task in the above format. [DONE]
-4. .done {task} Optional[DD/MM/YYYY] - Should be sth left today && should be in the list else given an error message. [DONE]
+3. .add {task} Optional[DD/MM/YY] - adds task in the above format. [DONE]
+4. .done {task} Optional[DD/MM/YY] - Should be sth left today && should be in the list else given an error message. [DONE]
 5. .pmonth - Work left for the month. [DONE]
 6. .aday / .done - Work done today. [DONE]
 7. .amonth - Work done this month. [DONE
@@ -38,8 +38,8 @@ To know more about the available features enter '.help'.
 help = """
 1. .intro - about the bot && user.
 2. .pday / .pending - Work left for today.
-3. .add [task] optional[DD/MM/YYYY] - adds task in the above format.
-4. .done [task] optional[DD/MM/YYYY]- Should be sth left && should be in the list else given an error message.
+3. .add [task] optional[DD/MM/YY] - adds task in the above format.
+4. .done [task] optional[DD/MM/YY]- Should be sth left && should be in the list else given an error message.
 5. .pmonth - Work left for the month.
 6. .aday / .done - Work done today.
 7. .amonth - Work done this month.
@@ -185,20 +185,19 @@ def get_response(msg):
         return get_done_month()
     return default_msg
 
-"""
+'''
 # Uncomment below code while testing.
-print (get_response(".add Task1"))
-print (get_response(".add Adding date [23/11/21]"))
-print (get_response(".pday"))
+print (get_response(".add Finish adding basic features of 'Keep Me On Track'"))
+print (get_response(".add Finish adding coding contest schedules [25/11/21]"))
+print (get_response(".add Clean Up the code."))
 print (get_response(".pday"))
 print (get_response(".pmonth"))
-print (get_response(".done Task1"))
-print (get_response(".done Adding date [23/11/21]"))
+print (get_response(".done Finish adding basic features of 'Keep Me On Track'"))
 print (get_response(".pday"))
 print (get_response(".pmonth"))
 print (get_response(".aday"))
 print (get_response(".amonth"))
-"""
+'''
 
 # Comment below code while tetsing
 
@@ -211,7 +210,7 @@ def hello():
 
 @app.route("/sms", methods=['POST'])
 def sms_reply():
-    """Respond to incoming calls with a simple text message."""
+    
     # Fetch the message
     msg = request.form.get('Body')
 
